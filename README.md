@@ -49,7 +49,6 @@ components/
 data/               サンプルの種データ（JSON）
 hooks/              React のカスタムフック
 lib/                型定義（zod スキーマ）・ユーティリティ
-openspec/           設計の決定記録（ADR、参考資料）
 __tests__/          テスト
 ```
 

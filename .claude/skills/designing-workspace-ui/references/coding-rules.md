@@ -141,7 +141,7 @@
 <span className="text-destructive">不合格</span>
 ```
 
-このプロジェクトのサーフェス階層は `openspec/decision/` の配色 ADR で定義されている。`app/globals.css` の `@theme` セクションと ADR を読み、既存トークンで表現できるか確認する。
+このプロジェクトのサーフェス階層は `app/globals.css` の `@theme` セクションで定義されている。読んで、既存トークンで表現できるか確認する。
 
 ---
 

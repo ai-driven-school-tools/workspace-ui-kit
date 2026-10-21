@@ -8,7 +8,7 @@
  *   node scripts/check-radius-drift.mjs
  *   npm run check:radius
  *
- * 参照: mockup-guide.md §9「角丸の役割マッピング」
+ * 参照: designing-workspace-ui スキル（SKILL.md）「角丸の階層ルール」
  *   bg-card で囲った「島」は原則 rounded-lg を使う（SKILL.md 階層ルール 2）。
  *   rounded-md は「メニューアイテム / リスト行 / サイドバー行」向け。
  */
@@ -51,7 +51,7 @@ for (const file of walk(TARGET_DIR)) {
 
 if (warnings > 0) {
   console.warn(`${warnings} 件の角丸ドリフト候補が見つかりました。`);
-  console.warn("参照: mockup-guide.md §9 / SKILL.md「角丸の階層ルール」");
+  console.warn("参照: designing-workspace-ui スキル（SKILL.md）「角丸の階層ルール」");
   process.exit(1);
 } else {
   console.log("✓ 角丸ドリフト候補なし");

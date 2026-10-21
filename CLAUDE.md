@@ -6,10 +6,6 @@
 ## 視覚 SSoT
 
 画面の SSoT（Single Source of Truth = 情報の正本）は `components/workspace/Workspace.tsx`。
-**ADR と実装で矛盾したら ADR-003 が正、実装は段階的に追従する**。
-（ADR-0015 仕様への追従は別タスクで進める。詳細は ADR-003 §13 R1 参照）
-
-- [ADR 一覧](openspec/decision/) — ペイン責務・デザインシステム・shadcn idiom 等の決定記録
 
 ## 同梱スキル
 

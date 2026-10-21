@@ -1,6 +1,6 @@
 ---
 name: designing-workspace-ui
-description: 配布物/workspace-ui-kit のワークスペース UI 作業（ペイン修正・コンポーネント追加・色や角丸や余白の変更・レイアウト調整・情報設計の検討・JSX の編集）で、shadcn idiom に準拠したコード生成とデザイン規律を強制するスキル。「Pane を変えたい」「ボタンを追加したい」「色を変えたい」「コンポーネントを作りたい」「workspace の見た目を直したい」「余白を直したい」「フォームを追加したい」「レイアウトを調整したい」と依頼された際に使用する。次の場合は使用しない: components/ 配下を編集しない単純な質問・タイポ修正・README やドキュメントのみの編集・openspec/ の ADR 起草のみ・テストコードのみの修正・依存パッケージ更新。
+description: 配布物/workspace-ui-kit のワークスペース UI 作業（ペイン修正・コンポーネント追加・色や角丸や余白の変更・レイアウト調整・情報設計の検討・JSX の編集）で、shadcn idiom に準拠したコード生成とデザイン規律を強制するスキル。「Pane を変えたい」「ボタンを追加したい」「色を変えたい」「コンポーネントを作りたい」「workspace の見た目を直したい」「余白を直したい」「フォームを追加したい」「レイアウトを調整したい」と依頼された際に使用する。次の場合は使用しない：components/ 配下を編集しない単純な質問・タイポ修正・README やドキュメントのみの編集・テストコードのみの修正・依存パッケージ更新。
 ---
 
 # Designing Workspace UI
@@ -20,7 +20,7 @@ CLAUDE.md の「コード生成ルール」を常時適用の禁止事項とし�
 - `components.json` — shadcn 設定（base / style / iconLibrary / alias。ファイルを読んで確認する）
 - `components/ui/` — shadcn 素体（編集可能。方針は後述）
 - `components/primitives/` — プロジェクト固有プリミティブ（`ls` して確認する。名前はハードコードしない）
-- `openspec/decision/` — ADR（ペイン責務・配色・角丸等。番号はハードコードせず `ls` で最新を確認する）
+- `components/workspace/Workspace.tsx` — 画面の正本（4ペインの構成と責務）
 
 前提: shadcn スキル（`.claude/skills/shadcn/`）がインストール済みであること。ただしこのスキルから shadcn スキルを読みに行く指示は出さない。必要なルールは自己完結で持つ。
 
@@ -95,7 +95,7 @@ SSoT 把握:
 - [ ] app/globals.css を読み、既存の semantic token を列挙した
 - [ ] components/ui/ を ls し、利用可能な shadcn 部品を列挙した
 - [ ] components/primitives/ を ls し、Inline* 等のプロジェクト固有部品を列挙した
-- [ ] openspec/decision/ を ls し、関連する ADR を読了した
+- [ ] components/workspace/Workspace.tsx と、変更するペインのファイルを読んだ
 ```
 
 このチェックが全て埋まる前にコード生成を開始してはならない。
@@ -126,7 +126,7 @@ SSoT 把握:
 
 レイアウトパターン・複数部品の組み合わせ規則・状態（empty / error / loading）の規律がない。
 
-やること: 既存 ADR を読み、本当に規律がないことを確認 → 規律案を起案 → ユーザーの判断を仰ぐ
+やること: このスキルの規律と `components/workspace/` の既存実装を確かめ、本当に規律がないことを確認 → 規律案を起案 → ユーザーの判断を仰ぐ
 
 やってはいけないこと: 「とりあえず置いてみる」で恒久パターンを既成事実化
 
@@ -146,7 +146,7 @@ SSoT 把握:
 分岐: 3a / 3b / 3c / 3d のどれか
 
 [根拠]
-Refactoring UI の <軸> / ADR の <規律> / shadcn idiom 上の <理由>
+Refactoring UI の <軸> / このスキルの <規律> / shadcn idiom 上の <理由>
 
 [提案]
 案1: <内容>（メリット / デメリット）
@@ -166,11 +166,11 @@ Refactoring UI の <軸> / ADR の <規律> / shadcn idiom 上の <理由>
 
 ### Pane 3 と Pane 4 の責務分離
 
-**「Pane 3 = 読む場所、Pane 4 = 編集の本拠地」**。詳細は `openspec/decision/` 配下の最新 ADR を確認する。
+**「Pane 3 = 人物軸（候補者の全体像と詳細）、Pane 4 = ステージ軸（選考ステージ単独の詳細）」**。どちらも編集できる。
 
-- Pane 3 のカードに inline 編集 UI（input・textarea・編集ボタン）を新たに置かない
-- 編集機能を足したい時は Pane 4 側に置く
-- 「Pane 3 にも編集を持たせたい」と要望が来たら、まず原則との衝突を伝え、本当に必要かを問い直す
+- 候補者その人についての項目は Pane 3 に置き、特定の選考ステージについての項目は Pane 4 に置く
+- 同じ項目を両方のペインに重複して置かない
+- どちらの軸か判断できない項目は、置き場所をユーザーに確認する（分岐 3d）
 
 ### インライン編集プリミティブの再利用
 
@@ -193,7 +193,7 @@ Refactoring UI の <軸> / ADR の <規律> / shadcn idiom 上の <理由>
 
 ## 角丸（border-radius）の階層ルール
 
-`rounded-*` クラスの選択に迷ったとき、以下の 4 ルールで判断する。役割 × R クラスの対応表は `openspec/changes/add-4pane-workspace-template/mockup-guide.md` の角丸セクションを参照。
+`rounded-*` クラスの選択に迷ったとき、以下の 4 ルールで判断する。
 
 ### ルール 1: 親 R ≧ 子 R
 
@@ -201,7 +201,7 @@ Refactoring UI の <軸> / ADR の <規律> / shadcn idiom 上の <理由>
 
 ### ルール 2: 同格の島は同じ R
 
-`bg-card` で囲った「島」は原則 `rounded-lg` に揃える。`Card` 本体だけは `rounded-xl` の例外。
+`bg-card` で囲った「島」は原則 `rounded-lg` に揃える。`Card` 本体だけは `rounded-xl` の例外。メニュー項目・リスト行・サイドバー行は `rounded-md` を使う。
 
 ### ルール 3: 厳密な同心までは求めない
 
